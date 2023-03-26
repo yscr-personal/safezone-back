@@ -1,17 +1,13 @@
-import { Injectable } from '@nestjs/common';
-import { UsersService } from 'src/users/users.service';
+import { Injectable, Logger } from '@nestjs/common';
+import { GroupsRepository } from './groups.repository';
 
 @Injectable()
 export class GroupsService {
-  constructor(private readonly UsersService: UsersService) {}
+  private readonly logger = new Logger(GroupsService.name);
+
+  constructor(private readonly groupsRepository: GroupsRepository) {}
 
   async findByUserId(userId: string) {
-    return [
-      {
-        id: '1',
-        name: 'Group 1',
-        members: [await this.UsersService.findById(userId)],
-      },
-    ];
+    return await this.groupsRepository.findByUserId(userId);
   }
 }

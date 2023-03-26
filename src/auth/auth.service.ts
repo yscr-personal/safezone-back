@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Inject,
   Injectable,
   Logger,
@@ -46,9 +47,7 @@ export class AuthService {
     };
   }
 
-  async register(
-    body: CreateUserDto,
-  ): Promise<{ ok: boolean; message: string }> {
+  async register(body: CreateUserDto): Promise<boolean> {
     const [foundEmail, foundUsername] = await Promise.all([
       this.usersService.findByEmail(body.email),
       this.usersService.findByUsername(body.username),
@@ -56,7 +55,7 @@ export class AuthService {
 
     if (foundEmail || foundUsername) {
       const reason = `${foundEmail ? 'Email' : 'Username'} already in use`;
-      const err = new UnauthorizedException(reason);
+      const err = new BadRequestException(reason);
       this.logger.error(
         `[${AuthService.name}] Fail to register - ${reason}`,
         err.stack,
@@ -69,10 +68,7 @@ export class AuthService {
       ...body,
       password: await this.hashPassword(body.password, salt),
     });
-    return {
-      ok: true,
-      message: 'user.created',
-    };
+    return true;
   }
 
   async validateToken(token: string) {
@@ -100,7 +96,7 @@ export class AuthService {
   }
 
   private async generateSalt() {
-    const rounds = this.configService.get<number>('SALT_ROUNDS');
+    const rounds = Number(this.configService.get('SALT_ROUNDS'));
     return await genSalt(rounds);
   }
 }

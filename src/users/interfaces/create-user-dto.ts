@@ -12,4 +12,7 @@ export class CreateUserDto {
 
   @IsNotEmpty()
   password: string;
+
+  @IsNotEmpty()
+  profilePicture: string;
 }

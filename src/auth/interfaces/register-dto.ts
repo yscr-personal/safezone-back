@@ -12,4 +12,7 @@ export class RegisterDto {
 
   @IsNotEmpty()
   password: string;
+
+  @IsNotEmpty()
+  profilePicture: string;
 }

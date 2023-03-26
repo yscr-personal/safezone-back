@@ -33,7 +33,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 async function setupApi(app: INestApplication) {
   const configService = app.get(ConfigService);
-  const PORT = configService.get<number>('PORT');
+  const PORT = Number(configService.get('PORT'));
   return await app.listen(PORT, () => {
     logger.debug(`Listening on port ${PORT}`, {
       context: 'NestApplication',

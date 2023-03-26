@@ -11,17 +11,30 @@ datasource db {
 }
 
 model User {
-  id             String    @id @default(uuid())
-  email          String    @unique
-  username       String    @unique
-  name           String
-  password       String
-  last_latitude  Float?
-  last_longitude Float?
-  last_seen      DateTime?
-  created_at     DateTime  @default(now())
-  updated_at     DateTime  @updatedAt
-  groupId        String?
+  id              String    @id @default(uuid())
+  email           String    @unique
+  username        String    @unique
+  name            String
+  password        String
+  last_latitude   Float?
+  last_longitude  Float?
+  last_seen       DateTime?
+  profile_picture String?
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @updatedAt
+
+  groupId String?
+  group   Group?  @relation(fields: [groupId], references: [id])
 
   @@map("users")
+}
+
+model Group {
+  id         String   @id @default(uuid())
+  name       String
+  users      User[]
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("groups")
 }

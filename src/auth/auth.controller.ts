@@ -21,7 +21,6 @@ export class AuthController {
   @Public()
   @Post('register')
   async register(@Body() body: RegisterDto) {
-    const result = await this.authService.register(body);
-    return result.ok;
+    return await this.authService.register(body);
   }
 }
